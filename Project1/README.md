@@ -2,6 +2,7 @@
 Shelly Bagchi, ENPM661, UMD-CP Spring 2020
 
 Find project (Visual Studio 2017) in ./ENPM661_Project1/
+Requirements:  NumPy
 
 Example 8-puzzle state and encoding:
 [[1 0 2]

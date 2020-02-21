@@ -158,7 +158,7 @@ def BuildTree(NodeList):
 
 
 def Backtrack():
-    print(">> Backtracking...");
+    print('\n', ">> Backtracking...");
     global Matrix_8puzzle_Nodes, Matrix_8puzzle_Indices, Matrix_8puzzle_Parents;
     global nodePathFile;
     path = [];
@@ -188,7 +188,15 @@ def Backtrack():
         nodePathFile.write(node_code + '\n');
 
     return;
-    
+
+
+def Solvable(node):
+    game_state = node.node_state;
+
+
+    return True;
+
+
 
 # Global variables to hold visited nodes
 Matrix_8puzzle_Nodes = {};
@@ -203,8 +211,30 @@ NodesInfoFile = open('NodesInfo.txt', 'w');
 AllNodesFile = open('Nodes.txt', 'w');
 
 
+# Get user input for initial game state
+print("Enter initial game state:");
+print("Enter first row of puzzle, e.g. \'1 2 3\'");
+input1 = input();
+print("Enter second row of puzzle");
+input2 = input();
+print("Enter third row of puzzle");
+input3 = input();
+
+# Convert input
+row1 = [int(a) for a in input1.split(' ')]; 
+row2 = [int(a) for a in input2.split(' ')]; 
+row3 = [int(a) for a in input3.split(' ')]; 
+#print(row1, row2, row3) ;
+puzzle_state = [row1, row2, row3];
+#print(puzzle_state);
+
 #  TODO:  Check if initial state is solvable
-root_node = Node([[0,1,2],[4,5,3],[7,8,6]]);
+if not Solvable(root_node):
+    print("Game state is unsolvable!  Exiting...");
+    return;
+
+root_node = Node(puzzle_state);
+print(root_node.node_state, '\n');
 AddNodes([root_node]);
 #print(root_node.node_state);
 #root_node.Print();
@@ -216,9 +246,9 @@ Backtrack();
 
 
 
-print(Matrix_8puzzle_Nodes);
-print(Matrix_8puzzle_Indices);
-print(Matrix_8puzzle_Parents);
+#print(Matrix_8puzzle_Nodes);
+print("Indices visited: ", Matrix_8puzzle_Indices);
+print("Parents of nodes: ", Matrix_8puzzle_Parents);
 #print(Matrix_8puzzle_States);
 
 
