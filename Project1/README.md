@@ -9,6 +9,10 @@ Example 8-puzzle state and encoding:
  [4 5 3]
  [7 8 6]]
 Code 1 4 7 0 5 8 2 3 6
+The puzzle state above should be entered into the console, following the prompts, as:
+1 0 2
+4 5 3
+7 8 6
 
 Codes of selected path will be printed to nodePath.txt; all visited node codes in Nodes.txt
 NodesInfo.txt contains node index, parent index, cost (always 0 here) of all visited nodes.

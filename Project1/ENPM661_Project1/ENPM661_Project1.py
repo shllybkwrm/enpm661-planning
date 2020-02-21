@@ -190,13 +190,26 @@ def Backtrack():
     return;
 
 
+# See https://www.geeksforgeeks.org/check-instance-8-puzzle-solvable/
+# https://datawookie.netlify.com/blog/2019/04/sliding-puzzle-solvable/
 def Solvable(node):
-    game_state = node.node_state;
+    game_state = node.node_state.copy();
+    state_list = game_state.flatten();
+    #print(state_list);
+
+    # Count number of inversions (number swaps)
+    num_inversions = 0;
+    for i in range(8):
+        for j in range(i+1, 9):
+            if state_list[j] and state_list[i] and state_list[i] > state_list[j]:
+                  num_inversions += 1; 
+
+    # Check if odd or even & return (odd -> unsolvable!)
+    print("(Inversions: ", num_inversions, ") \n");
+    return (num_inversions%2 == 0);
 
 
-    return True;
-
-
+# ----- MAIN -----
 
 # Global variables to hold visited nodes
 Matrix_8puzzle_Nodes = {};
@@ -228,13 +241,20 @@ row3 = [int(a) for a in input3.split(' ')];
 puzzle_state = [row1, row2, row3];
 #print(puzzle_state);
 
-#  TODO:  Check if initial state is solvable
-if not Solvable(root_node):
-    print("Game state is unsolvable!  Exiting...");
-    return;
+# Check if valid
+if len(row1)!=3 or len(row2)!=3 or len(row3)!=3:
+    print("Input was incorrectly formatted.  Exiting...");
+    exit();
 
+# Create initial node
 root_node = Node(puzzle_state);
 print(root_node.node_state, '\n');
+#  Check if initial state is solvable
+if not Solvable(root_node):
+    print("Entered game state is unsolvable!  Exiting...");
+    exit();
+    #quit();
+
 AddNodes([root_node]);
 #print(root_node.node_state);
 #root_node.Print();
