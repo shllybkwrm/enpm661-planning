@@ -111,17 +111,22 @@ def CheckGoal(node):
 
 def AddNodes(NewNodes):
     global Matrix_8puzzle_Nodes, Matrix_8puzzle_Indices, Matrix_8puzzle_Parents;
+    global NodesInfoFile, AllNodesFile;
 
     for node in NewNodes:
         # Need to check if new node STATE or not
 
         if node.code not in Matrix_8puzzle_States:
+            print("Adding node", node.node_index);
 
             #Matrix_8puzzle_Nodes.append(node);
             Matrix_8puzzle_Nodes[node.node_index] = node;
             Matrix_8puzzle_Indices.append(node.node_index);
             Matrix_8puzzle_Parents.append(node.parent_node_index);
             Matrix_8puzzle_States.append(node.code);
+
+            AllNodesFile.write(node.code+'\n');
+            NodesInfoFile.write(str(node.node_index) + ' ' + str(node.parent_node_index) + ' 0 \n');
 
             #print(node.node_state);
             #print("Code:", node.code);
@@ -130,7 +135,7 @@ def AddNodes(NewNodes):
                 return True;
 
         else:
-            print("Game state already visited");
+            print("Game state already visited!  Skipping node", node.node_index);
 
     return False;
 
@@ -139,6 +144,7 @@ def BuildTree(NodeList):
     res = False;
     ChildList = [];
 
+    # Build tree level by level
     print(">> Tree level ", NodeList[0].parent_node_index+1);
     for node in NodeList:
         Children = node.GetChildren();
@@ -152,20 +158,50 @@ def BuildTree(NodeList):
 
 
 def Backtrack():
+    print(">> Backtracking...");
     global Matrix_8puzzle_Nodes, Matrix_8puzzle_Indices, Matrix_8puzzle_Parents;
+    global nodePathFile;
+    path = [];
 
+    # Start with goal, should be last visited node
+    goal_node = Matrix_8puzzle_Nodes[Matrix_8puzzle_Indices[-1]];
+    parent_index = goal_node.parent_node_index;
     
-    #print(node.node_state);
-    #print("Code:", node.code);
+    print(goal_node.node_state);
+    print("Code:", goal_node.code);
+    path.append(goal_node.code);
+    #nodePathFile.write(goal_node.code+'\n');  # Need to reverse this!!
 
-    pass
+    while parent_index != 0:
+        parent = Matrix_8puzzle_Nodes[parent_index];
+    
+        print(parent.node_state);
+        print("Code:", parent.code);
+        path.append(parent.code);
+        #nodePathFile.write(parent.code+'\n');
+
+        # Get next parent
+        parent_index = parent.parent_node_index;
+
+    # Write to file in traversal order (reversed)
+    for node_code in reversed(path):
+        nodePathFile.write(node_code + '\n');
+
+    return;
     
 
-
+# Global variables to hold visited nodes
 Matrix_8puzzle_Nodes = {};
 Matrix_8puzzle_Indices = [];
 Matrix_8puzzle_Parents = [];
 Matrix_8puzzle_States = [];  # Plaintext game states
+
+
+# File objects for output
+nodePathFile = open('nodePath.txt', 'w');
+NodesInfoFile = open('NodesInfo.txt', 'w');
+AllNodesFile = open('Nodes.txt', 'w');
+
 
 #  TODO:  Check if initial state is solvable
 root_node = Node([[0,1,2],[4,5,3],[7,8,6]]);
@@ -176,8 +212,7 @@ print("Empty tile starts at ", root_node.i, root_node.j);
 
 BuildTree([root_node]);
 
-
-
+Backtrack();
 
 
 
@@ -186,3 +221,7 @@ print(Matrix_8puzzle_Indices);
 print(Matrix_8puzzle_Parents);
 #print(Matrix_8puzzle_States);
 
+
+nodePathFile.close();
+NodesInfoFile.close();
+AllNodesFile.close();
