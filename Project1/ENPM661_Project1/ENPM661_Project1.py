@@ -1,3 +1,7 @@
+# ENPM661, Spring 2020, Project 1
+# Shelly Bagchi
+
+
 import numpy as np
 
 indexCounter = 0;

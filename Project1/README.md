@@ -1,7 +1,7 @@
 8-puzzle solver project in Python 3
 Shelly Bagchi, ENPM661, UMD-CP Spring 2020
 
-Find project (Visual Studio 2017) in ./ENPM661_Project1/
+Find project (Visual Studio 2017) in enpm661-planning\Project1\ENPM661_Project1
 Requirements:  NumPy
 
 Example 8-puzzle state and encoding:
