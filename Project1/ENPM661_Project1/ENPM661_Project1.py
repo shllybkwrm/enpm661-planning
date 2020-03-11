@@ -1,8 +1,9 @@
 # ENPM661, Spring 2020, Project 1
 # Shelly Bagchi
 
-
 import numpy as np
+import time
+
 
 indexCounter = 0;
 
@@ -140,6 +141,7 @@ def AddNodes(NewNodes):
 
         else:
             print("Game state already visited!  Skipping node", node.node_index);
+            del node;
 
     return False;
 
@@ -174,7 +176,6 @@ def Backtrack():
     print(goal_node.node_state);
     print("Code:", goal_node.code);
     path.append(goal_node.code);
-    #nodePathFile.write(goal_node.code+'\n');  # Need to reverse this!!
 
     while parent_index != 0:
         parent = Matrix_8puzzle_Nodes[parent_index];
@@ -214,6 +215,9 @@ def Solvable(node):
 
 
 # ----- MAIN -----
+
+start_time = time.time()
+
 
 # Global variables to hold visited nodes
 Matrix_8puzzle_Nodes = {};
@@ -274,6 +278,10 @@ Backtrack();
 print("Indices visited: ", Matrix_8puzzle_Indices);
 print("Parents of nodes: ", Matrix_8puzzle_Parents);
 #print(Matrix_8puzzle_States);
+
+
+end_time = time.time()
+print("Total execution time:", end_time-start_time)
 
 
 nodePathFile.close();
