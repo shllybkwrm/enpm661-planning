@@ -50,62 +50,64 @@ class Node:
                 if self.node_state[i,j]==0:
                     return (i,j);
                 else: pass
-
     
-    def ActionMoveLeft(self):
-        (i,j) = (self.i,self.j);
-        game_state = self.node_state.copy();
-        if j>0:
-            game_state[i,j] = game_state[i,j-1];
-            game_state[i,j-1] = 0;
-            return Node(game_state, self.node_index);
-        else: return None;
-
-    def ActionMoveRight(self):
-        (i,j) = (self.i,self.j);
-        game_state = self.node_state.copy();
-        if j<2:
-            game_state[i,j] = game_state[i,j+1];
-            game_state[i,j+1] = 0;
-            return Node(game_state, self.node_index);
-        else: return None;
-
-    def ActionMoveUp(self):
-        (i,j) = (self.i,self.j);
-        game_state = self.node_state.copy();
-        if i>0:
-            game_state[i,j] = game_state[i-1,j];
-            game_state[i-1,j] = 0;
-            return Node(game_state, self.node_index);
-        else: return None;
-
-    def ActionMoveDown(self):
-        (i,j) = (self.i,self.j);
-        game_state = self.node_state.copy();
-        if i<2:
-            game_state[i,j] = game_state[i+1,j];
-            game_state[i+1,j] = 0;
-            return Node(game_state, self.node_index);
-        else: return None;
-    
-    def GetChildren(self):
-        ChildList = [];
-
-        Child = self.ActionMoveLeft();
-        ChildList.append(Child) if Child!=None else None;
-        Child = self.ActionMoveRight();
-        ChildList.append(Child) if Child!=None else None;
-        Child = self.ActionMoveUp();
-        ChildList.append(Child) if Child!=None else None;
-        Child = self.ActionMoveDown();
-        ChildList.append(Child) if Child!=None else None;
-
-        print(" > Found children,", len(ChildList));
-        return ChildList;
-
 
     def Print(self):
         print(self.node_state[:,0], self.node_state[:,1], self.node_state[:,2]);
+
+    
+def ActionMoveLeft(node):
+    (i,j) = (node.i,node.j);
+    game_state = node.node_state.copy();
+    if j>0:
+        game_state[i,j] = game_state[i,j-1];
+        game_state[i,j-1] = 0;
+        return Node(game_state, node.node_index);
+    else: return None;
+
+def ActionMoveRight(node):
+    (i,j) = (node.i,node.j);
+    game_state = node.node_state.copy();
+    if j<2:
+        game_state[i,j] = game_state[i,j+1];
+        game_state[i,j+1] = 0;
+        return Node(game_state, node.node_index);
+    else: return None;
+
+def ActionMoveUp(node):
+    (i,j) = (node.i,node.j);
+    game_state = node.node_state.copy();
+    if i>0:
+        game_state[i,j] = game_state[i-1,j];
+        game_state[i-1,j] = 0;
+        return Node(game_state, node.node_index);
+    else: return None;
+
+def ActionMoveDown(node):
+    (i,j) = (node.i,node.j);
+    game_state = node.node_state.copy();
+    if i<2:
+        game_state[i,j] = game_state[i+1,j];
+        game_state[i+1,j] = 0;
+        return Node(game_state, node.node_index);
+    else: return None;
+    
+
+def GetChildren(node):
+    ChildList = [];
+
+    Child = ActionMoveLeft(node);
+    ChildList.append(Child) if Child!=None else None;
+    Child = ActionMoveRight(node);
+    ChildList.append(Child) if Child!=None else None;
+    Child = ActionMoveUp(node);
+    ChildList.append(Child) if Child!=None else None;
+    Child = ActionMoveDown(node);
+    ChildList.append(Child) if Child!=None else None;
+
+    #print(" > Found children,", len(ChildList));
+    return ChildList;
+
 
 
 def CheckGoal(node):
@@ -122,7 +124,7 @@ def AddNodes(NewNodes):
         # Need to check if new node STATE or not
 
         if node.code not in Matrix_8puzzle_States:
-            print("Adding node", node.node_index);
+            print("Adding new node: ", node.node_index);
 
             #Matrix_8puzzle_Nodes.append(node);
             Matrix_8puzzle_Nodes[node.node_index] = node;
@@ -140,7 +142,7 @@ def AddNodes(NewNodes):
                 return True;
 
         else:
-            print("Game state already visited!  Skipping node", node.node_index);
+            #print("Game state already visited!  Skipping node: ", node.node_index);
             del node;
 
     return False;
@@ -153,7 +155,7 @@ def BuildTree(NodeList):
     # Build tree level by level
     print(">> Tree level ", NodeList[0].parent_node_index+1);
     for node in NodeList:
-        Children = node.GetChildren();
+        Children = GetChildren(node);
         res = AddNodes(Children);
         if res:  # Returns true if goal found
             return;
@@ -216,8 +218,6 @@ def Solvable(node):
 
 # ----- MAIN -----
 
-start_time = time.time()
-
 
 # Global variables to hold visited nodes
 Matrix_8puzzle_Nodes = {};
@@ -240,6 +240,10 @@ print("Enter second row of puzzle");
 input2 = input();
 print("Enter third row of puzzle");
 input3 = input();
+
+# Start time counter after input is completed
+start_time = time.time()
+
 
 # Convert input
 row1 = [int(a) for a in input1.split(' ')]; 
