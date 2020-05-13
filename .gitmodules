@@ -1,3 +1,9 @@
 [submodule "enpm661-p2"]
 	path = enpm661-p2
 	url = https://github.com/shllybkwrm/enpm661-p2
+[submodule "enpm661-p3"]
+	path = enpm661-p3
+	url = https://github.com/shllybkwrm/enpm661-p3.git
+[submodule "enpm661-p5"]
+	path = enpm661-p5
+	url = https://github.com/shllybkwrm/enpm661-p5
